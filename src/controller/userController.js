@@ -22,9 +22,9 @@ exports.registration = async (req, res) => {
       return res.status(404).send("registration fail!");
     }
 
-    return res.status(200).json({ success: true, data: userinfo });
+    return res.status(200).json({ status: true, data: userinfo });
   } catch (error) {
-    return res.status(400).json({ success: false, message: error });
+    return res.status(400).json({ status: false, message: error });
   }
 };
 
@@ -46,7 +46,7 @@ exports.login = async (req, res) => {
       return res.status(400).send("Password is wrong");
     }
   } catch (error) {
-    return res.status(400).json({ success: false, message: error });
+    return res.status(400).json({ status: false, message: error });
   }
 };
 
@@ -74,11 +74,25 @@ exports.profileUpdate = async (req, res) => {
     if (!user) {
       return res
         .status(404)
-        .send({ success: false, message: "The user not update !" });
+        .send({ status: false, message: "The user not update !" });
     }
     return res.status(200).json({ status: true, data: user });
   } catch (error) {
-    return res.status(400).json({ success: false, message: error });
+    return res.status(400).json({ status: false, message: error });
   }
 };
 
+
+exports.getProfile = async (req, res) => {
+  try {
+    const user = await userModel.findById(req.params.id).select("-password")
+    if (!user) {
+      return res
+        .status(404)
+        .send({ status: false, message: "The user not find !" });
+    }
+    return res.status(200).json({ status: true, data: user });
+  } catch (error) {
+    return res.status(400).json({ status: false, message: error });
+  }
+};
